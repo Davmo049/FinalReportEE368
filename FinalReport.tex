@@ -1,0 +1,161 @@
+
+\documentclass[journal,twoside]{IEEEtran}
+\usepackage{lipsum}
+\usepackage{fancyhdr}
+\usepackage{ifpdf}
+\usepackage{graphicx}
+\usepackage{float}
+
+\usepackage{makecell}
+\usepackage[table]{xcolor}
+\usepackage{xcolor, colortbl}	
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+
+
+\ifCLASSINFOpdf
+\else
+\fi
+
+
+\makeatletter
+
+\newcommand{\shortname}{Final Report} \def\ps@headings{
+\def\@evenhead{\scriptsize\mbox{\MakeUppercase{\shortname}}\rightmark \hfil \thepage}\def\@oddhead{\scriptsize\thepage \hfil \leftmark\mbox{\MakeUppercase{\shortname}}}\def\@oddfoot{}\def\@evenfoot{}}\def\ps@IEEEtitlepagestyle{\def\@evenhead{\scriptsize\mbox{\MakeUppercase{\shortname}}\rightmark \hfil \thepage}\def\@oddhead{\scriptsize\thepage \hfil \leftmark\mbox{\MakeUppercase{\shortname}}}\def\@oddfoot{}\def\@evenfoot{}}\makeatother\pagestyle{headings}\pagenumbering{gobble}
+
+\begin{document}
+
+\title{Determining the state of thexas hold 'em in almost to real time}
+
+\author{ David Molin\IEEEauthorrefmark{2} 
+, 
+Tomas Rosin Forsyth \IEEEauthorrefmark{8}
+
+\IEEEcompsocitemizethanks{\IEEEcompsocthanksitem \IEEEauthorrefmark{2}dmolin@stanford.edu
+
+\IEEEcompsocthanksitem \IEEEauthorrefmark{8}tomfo@stanford.edu}}% <-this % stops a space
+
+\maketitle
+
+\begin{abstract}
+TODO
+
+\end{abstract}
+
+%\begin{IEEEkeywords}
+
+%\end{IEEEkeywords}
+
+
+\IEEEpeerreviewmaketitle
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%  Introduction %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+The problem of automatically detecting suit and rank of playing cards based on a stream of images could potentially be used for  several commerical or non-commerical applications. One such application could be to automatically determine the cards on the table for broadcasting live poker tournaments.
+Generally when attempting to match objects with a known template in images it is possible to use keypoint detectors such as SIFT \cite{SIFT} or ORB \cite{ORB} and match these keypoints and doing a geometric consistency check through the use of RANSAC. However due to the fact that the keypoints on poker cards would correspond to the corners of the suit symbols (check expression TODO) the ratio test described in \cite{SIFT} would reject most of the matches as there are multiple of each suit symbol on each card.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%  Prior work %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Prior work}
+
+Some prior work has been done in this field for example \cite{PokerVision} Manages to do this with an accuracy of $94\%$.
+TODO
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%  Method %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Method}
+
+\begin{figure}[placement h]
+\centering
+\includegraphics[scale=0.4, trim= 0cm 0cm 0cm 0cm]{TODO.png}
+\caption{Outline of the process used for detecting cards in this paper}
+\label{fig:AlgOutline}
+\end{figure}
+
+The process used in this paper for extracting the suit and rank of all cards in an image can be divided into two parts. The first part is extracting position of the corners of all cards and then from this position extract a image of the card oriented in a upright position with a known size. The other prat of the algorithm is to find the suit and rank from a image of a card placed in a upright position.
+
+\subsection{Extracting the card corners}
+
+First the assumption that the cards are considerably brighter than the background is made. This is usually true since poker cards are pieces of white paper and the table which poker is played on a green tablecloth, or in some cases on a wooden table.
+This motivates why it should be possible to extract the poker cards from the background by using Otsu's method\cite{OTSU}.
+
+Once Otsu's method has extracted a mask of the cards it is possible to extract the contours of the card by applying the method described in \cite{CONTOURS}. A card will have a contour consisting of 4 lines. Since playing cards are small and the distance to the playing cards are much larger than the size of the card there will be pairs of almost paralell lines for the contours of the cards. This stucture can be used by finding the paralell lines by using a Hough transform CITE TODO. ...
+
+\subsection{Extracting each card to a known orientation}
+
+\subsection{Finding rank and suit of a card}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%  Results %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results}
+
+\begin{tabular}{|  l | c | r | }
+  \hline                       
+  1 & 2 & 3 \\ \hline
+  4 & 5 & 6 \\ \hline
+  7 & 8 & 9 \\
+  \hline  
+\end{tabular} \\
+
+TODO
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%  Discussion %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Discussion}
+
+TODO
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%  Future work %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Future work}
+
+TODO
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%  Conclusion %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Conclusion}
+
+TODO
+
+
+
+\begin{thebibliography}{9}
+
+\bibitem{SIFT}
+Lowe, David G. "Distinctive image features from scale-invariant keypoints." International journal of computer vision 60.2 (2004): 91-110.
+
+\bibitem{ORB}
+Rublee, Ethan, et al. "ORB: an efficient alternative to SIFT or SURF." Computer Vision (ICCV), 2011 IEEE International Conference on. IEEE, 2011.
+
+\bibitem{PokerVision}
+Martins, Paulo, Luís Paulo Reis, and Luís Teófilo. "Poker vision: playing cards and chips identification based on image processing." Pattern Recognition and Image Analysis. Springer Berlin Heidelberg, 2011. 436-443.
+
+\bibitem{HoughP}
+Matas, Jiri, Charles Galambos, and Josef Kittler. "Robust detection of lines using the progressive probabilistic hough transform." Computer Vision and Image Understanding 78.1 (2000): 119-137.
+
+\bibitem{OTSU}
+Otsu, Nobuyuki. "A threshold selection method from gray-level histograms." Automatica 11.285-296 (1975): 23-27.
+
+\bibitem{CONTOURS}
+Suzuki, Satoshi. "Topological structural analysis of digitized binary images by border following." Computer Vision, Graphics, and Image Processing 30.1 (1985): 32-46.
+
+\bibliographystyle{IEEEtran}
+
+\end{thebibliography}
+\end{document}
