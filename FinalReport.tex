@@ -12,6 +12,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{hyperref}
+\usepackage{multirow}
 
 
 \ifCLASSINFOpdf
@@ -57,7 +58,7 @@ TODO
 
 \section{Introduction}
 The problem of automatically detecting suit and rank of playing cards based on a stream of images could potentially be used for  several commerical or non-commerical applications. One such application could be to automatically determine the cards on the table for broadcasting live poker tournaments.
-Generally when attempting to match objects with a known template in images it is possible to use keypoint detectors such as SIFT \cite{SIFT} or ORB \cite{ORB} and match these keypoints and doing a geometric consistency check through the use of RANSAC. However due to the fact that the keypoints on poker cards would correspond to the corners of the suit symbols (check expression TODO) the ratio test described in \cite{SIFT} would reject most of the matches as there are multiple of each suit symbol on each card.
+Generally when attempting to match objects with a known template in images it is possible to use keypoint detectors such as SIFT \cite{SIFT} or ORB \cite{ORB} and match these keypoints and doing a geometric consistency check through the use of RANSAC. However due to the fact that the keypoints on poker cards would correspond to the corners of the suit symbols (check expression TODO) the ratio test described in \cite{SIFT} would reject most of the matches as there are multiple of each suit symbol on each card. TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Prior work %%%%%%%%%%%%%%
@@ -65,7 +66,7 @@ Generally when attempting to match objects with a known template in images it is
 
 \section{Prior work}
 
-Some prior work has been done in this field for example \cite{PokerVision} Manages to do this with an accuracy of $94\%$.
+Some prior work has been done in this field for example \cite{PokerVision} uses optical character recognition in order to determine the 
 TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -85,27 +86,82 @@ The process used in this paper for extracting the suit and rank of all cards in 
 
 \subsection{Extracting the card corners}
 
+\begin{figure}[placement h]
+\centering
+\includegraphics[scale=0.4, trim= 0cm 0cm 0cm 0cm]{TODO.png}
+\caption{Pipeline for identifying the cards and finding their corners}
+\label{fig:CornerOutline}
+\end{figure}
+
 First the assumption that the cards are considerably brighter than the background is made. This is usually true since poker cards are pieces of white paper and the table which poker is played on a green tablecloth, or in some cases on a wooden table.
 This motivates why it should be possible to extract the poker cards from the background by using Otsu's method\cite{OTSU}.
 
-Once Otsu's method has extracted a mask of the cards it is possible to extract the contours of the card by applying the method described in \cite{CONTOURS}. A card will have a contour consisting of 4 lines. Since playing cards are small and the distance to the playing cards are much larger than the size of the card there will be pairs of almost paralell lines for the contours of the cards. This stucture can be used by finding the paralell lines by using a Hough transform CITE TODO. ...
+Once Otsu's method has extracted a mask of the cards it is possible to extract the contours of the card by applying the method described in \cite{CONTOURS}. A card will have a contour consisting of 4 lines. Since playing cards are small and the distance to the playing cards are much larger than the size of the card there will be pairs of almost paralell lines for the contours of the cards. This stucture can be used by finding the paralell lines by using a Hough transform. In practice the hough transform is too slow for almost real time applications, therefore the progressive probabilistic hough transform described in \cite{HoughP}, This will give results similar to the one in the original Hough transform, but using less computation. From the hough transform it is possible to find the endpoints of long paralell lines. These points will usually correspond to the corners of the cards, some false positives might result from this but these can then be rejected at a later stage in the pipeline.
 
-\subsection{Extracting each card to a known orientation}
+Once these corners are found it is trivial to find and apply an projective transformation whch maps the cards to a default size.
 
 \subsection{Finding rank and suit of a card}
+
+\begin{figure}[placement h]
+\centering
+\includegraphics[scale=0.4, trim= 0cm 0cm 0cm 0cm]{TODO.png}
+\caption{Pipeline for determining the rank and suit of a card}
+\label{fig:RankSuitOutline}
+\end{figure}
+
+The color of the card can be extracted by comparing the red channel with some other color channel. For red cards such as diamonds and hearts the red channel will assume large values at all points on the card, this will not however be the case for black cards such as spades or clubs. This fact can then be used to determine if the suit of a card is red or black.
+
+Since all cards have the suit symbol in the upper left corner it is possible to extract the suit by doing template matching in this region.
+
+Furthermore it is possible to notice that the appearence of the face cards and nonface cards are quite different, the face cards consist of a large image suggesting that keypoint matching such as ORB or SIFT could be used to match these cards by comparing the extracted keypoints to the query card. This suggests that it should be a good idea to compute the rank for face cards and nonface cards in different ways.
+
+In order to determine wheather a card is a face card or a nonface card the fact that face cards consist of one large connected blob, while nonface cards consist of several small blobs is used. Blobs are found by using Otsu's method. Then the size of the largest blob in the image is found. If this size is larger than some predetermined threshhold the image is classified as a face card.
+
+When doing keypoint matching for the face cards some issues might arise for the ratio test in \cite{SIFT} since the bottom half of a face cards is a mirrored copy of the top half and therefore each feature would have a corresponding feature from the mirrored part of the card. This should however not be too much of an issue even if ignored and can be solved by instead of using the third closest feature for the ratio test instead of the second  closes feature. 
+
+For nonface cards keypoints mathcing would be unsuitable due to the fact that keypoints would mainly be found for the suit symbols and these occur several times on each card and therefore the mathes would not be good.
+Instead it is possbile to count the number of blobs on each nonface card. Each blob will correspond to one suit symbol. In order to supress noise the blobs would have to be larger than a given threshhold, otherwise the small symbols in the corner of the cards as well as small blobs created by noise would contribute to the rank of the card. The blobs are found by applying otsu's method on the blue channel of the cards.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Results %%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 
-\begin{tabular}{|  l | c | r | }
-  \hline                       
-  1 & 2 & 3 \\ \hline
-  4 & 5 & 6 \\ \hline
-  7 & 8 & 9 \\
-  \hline  
+\subsection{Test set}
+
+IMAGES OF THE TEST SET TODO
+
+The method for determining the suit and rank of the cards described in method is in this section applied to a test set of 20 images, each containing 3 cards taken in an indoor environment with conditions similar to the ones for a real pokertable. In other words clutter will be present and the images will not be close ups of poker cards taken from above. Some photographs will include motion blur as this will generally be present when a mobile device is used for determining cards in real time.
+
+\begin{table}[placement h]
+    \label{tab:Confusion}
+    \centering
+
+\begin{tabular}{cc|c|l|l|}
+\cline{3-4}
+& & \multicolumn{2}{ c| }{Real class} \\ \cline{3-4}
+& & Card & Non card  \\ \cline{1-4}
+\multicolumn{1}{ |c| }{\multirow{2}{*}{Detected class} } &
+\multicolumn{1}{ |c| }{Card} & a & b     \\ \cline{2-4}
+\multicolumn{1}{ |c  }{}                        &
+\multicolumn{1}{ |c| }{NonCard} & c & -    \\ \cline{1-4}
 \end{tabular} \\
+
+\caption{Confusion matrix of the cards detected by the algorithm}
+
+\end{table}
+
+The confusion matrix shows that the results for detecting the cards is good.
+
+When runnning the entire pieline the accuracy is $TODO\%$ 
+
+CARDS $\&$ IMAGES INCorectly CLASSIFIED IMAGES
+
+COMMENTS ON the incorrectly classified images
+
+CARDS $\&$ IMAGES Corectly CLASSIFIED IMAGES
+
+COMMENTS ON the correctly classified images
 
 TODO
 
@@ -115,7 +171,7 @@ TODO
 
 \section{Discussion}
 
-TODO
+As can be seen in the results section this approach gives pretty good results. Although they are slightly worse than the results in \cite{PokerVision} the training set for that paper was taken is a more controlled environment. TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Future work %%%%%%%%%%%%%%%%
@@ -123,7 +179,7 @@ TODO
 
 \subsection{Future work}
 
-TODO
+Future work could include to find a way to make this method work with occluded cards and for cases where the cards are placed on top of eachother. it should also be possible to improve the results by making a better corner detector as the corners are not perfectly detected by the current pipeline which means that the recognition step gets a slightly warped card as an input.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Conclusion %%%%%%%%%%%%%%%%
@@ -132,8 +188,6 @@ TODO
 \section{Conclusion}
 
 TODO
-
-
 
 \begin{thebibliography}{9}
 
@@ -154,6 +208,10 @@ Otsu, Nobuyuki. "A threshold selection method from gray-level histograms." Autom
 
 \bibitem{CONTOURS}
 Suzuki, Satoshi. "Topological structural analysis of digitized binary images by border following." Computer Vision, Graphics, and Image Processing 30.1 (1985): 32-46.
+
+\bibitem{HoughP}
+Matas, Jiri, Charles Galambos, and Josef Kittler. "Robust detection of lines using the progressive probabilistic hough transform." Computer Vision and Image Understanding 78.1 (2000): 119-137.
+
 
 \bibliographystyle{IEEEtran}
 
