@@ -40,7 +40,7 @@ Tomas Rosin Forsyth \IEEEauthorrefmark{8}
 \maketitle
 
 \begin{abstract}
-TODO
+This paper will describe a method which finds and determines suit and rank of playing cards in an image, the image processing pipeline developed in this paper is developed in such a way that it should be possible to make it run on an mobile device in close to real time. The resulting pipeline managed to find and correctly classify images with an accuracy of  66\%
 
 \end{abstract}
 
@@ -66,8 +66,10 @@ Generally when attempting to match objects with a known template in images it is
 
 \section{Prior work}
 
-Some prior work has been done in this field for example \cite{PokerVision} uses optical character recognition in order to determine the 
-TODO
+Some prior work in this field has been done for example \cite{PokerVision} used optical character recognition in order to determine the  suit and rank of playing cards. In 2007 \cite{CardRec} used template matching of the symbols in the corners of the cards to determine the rank of playing cards.
+In the field of image processing there has been several papers published whihc describes methods which are possible to use for card recognition. In 95 Kiryati et. al. proposed a method to compute an approximate hough transform by only consider a subset of the points in the image\cite{HoughProb}. In 2000 Matas et. al. made improvements to the probabilistic hough transform\cite{HoughP}.
+Keypoint and feature detection such as SIFT \cite{SIFT} and \cite{ORB} has also beeend developed the last decade and these methods can be used to find instances of objects in an image. In 79 Nobuyuki Otsu developed a method to find a threshhold which could separate bright portions of an image from dark portions\cite{OTSU}.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Method %%%%%%%%%%%%%%%%
@@ -109,15 +111,23 @@ Once these corners are found it is trivial to find and apply an projective trans
 \label{fig:RankSuitOutline}
 \end{figure}
 
+\subsubsection{Determining suit}
+
 The color of the card can be extracted by comparing the red channel with some other color channel. For red cards such as diamonds and hearts the red channel will assume large values at all points on the card, this will not however be the case for black cards such as spades or clubs. This fact can then be used to determine if the suit of a card is red or black.
 
 Since all cards have the suit symbol in the upper left corner it is possible to extract the suit by doing template matching in this region.
+
+\subsubsection{determining if a card is a face or nonface card}
 
 Furthermore it is possible to notice that the appearence of the face cards and nonface cards are quite different, the face cards consist of a large image suggesting that keypoint matching such as ORB or SIFT could be used to match these cards by comparing the extracted keypoints to the query card. This suggests that it should be a good idea to compute the rank for face cards and nonface cards in different ways.
 
 In order to determine wheather a card is a face card or a nonface card the fact that face cards consist of one large connected blob, while nonface cards consist of several small blobs is used. Blobs are found by using Otsu's method. Then the size of the largest blob in the image is found. If this size is larger than some predetermined threshhold the image is classified as a face card.
 
+\subsubsection{classifying face cards}
+
 When doing keypoint matching for the face cards some issues might arise for the ratio test in \cite{SIFT} since the bottom half of a face cards is a mirrored copy of the top half and therefore each feature would have a corresponding feature from the mirrored part of the card. This should however not be too much of an issue even if ignored and can be solved by instead of using the third closest feature for the ratio test instead of the second  closes feature. 
+
+\subsubsection{classifying nonface cards}
 
 For nonface cards keypoints mathcing would be unsuitable due to the fact that keypoints would mainly be found for the suit symbols and these occur several times on each card and therefore the mathes would not be good.
 Instead it is possbile to count the number of blobs on each nonface card. Each blob will correspond to one suit symbol. In order to supress noise the blobs would have to be larger than a given threshhold, otherwise the small symbols in the corner of the cards as well as small blobs created by noise would contribute to the rank of the card. The blobs are found by applying otsu's method on the blue channel of the cards.
@@ -212,9 +222,14 @@ Otsu, Nobuyuki. "A threshold selection method from gray-level histograms." Autom
 \bibitem{CONTOURS}
 Suzuki, Satoshi. "Topological structural analysis of digitized binary images by border following." Computer Vision, Graphics, and Image Processing 30.1 (1985): 32-46.
 
+\bibitem{CardRec}
+Zheng, Chunhui, and Richard Green. "Playing card recognition using rotational invariant template matching." Proc. of Image and Vision Computing New Zealand. 2007.
+
 \bibitem{HoughP}
 Matas, Jiri, Charles Galambos, and Josef Kittler. "Robust detection of lines using the progressive probabilistic hough transform." Computer Vision and Image Understanding 78.1 (2000): 119-137.
 
+\bibitem{HoughProb}
+Kiryati, Nahum, Yuval Eldar, and Alfred M. Bruckstein. "A probabilistic Hough transform." Pattern recognition 24.4 (1991): 303-316.
 
 \bibliographystyle{IEEEtran}
 
