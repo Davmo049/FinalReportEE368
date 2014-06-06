@@ -20,6 +20,12 @@
 \citation{ORB}
 \citation{SIFT}
 \citation{PokerVision}
+\citation{CardRec}
+\citation{HoughProb}
+\citation{HoughP}
+\citation{SIFT}
+\citation{ORB}
+\citation{OTSU}
 \citation{OTSU}
 \citation{CONTOURS}
 \citation{HoughP}
@@ -28,13 +34,17 @@
 \@writefile{toc}{\contentsline {section}{\numberline {III}Method}{}{section.3}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Outline of the process used for detecting cards in this paper}}{}{figure.1}}
 \newlabel{fig:AlgOutline}{{1}{}{Outline of the process used for detecting cards in this paper}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-A}}Extracting the card corners}{}{subsection.3.1}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Pipeline for identifying the cards and finding their corners}}{}{figure.2}}
 \newlabel{fig:CornerOutline}{{2}{}{Pipeline for identifying the cards and finding their corners}{figure.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-A}}Extracting the card corners}{}{subsection.3.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-B}}Finding rank and suit of a card}{}{subsection.3.2}}
 \citation{SIFT}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-B}}Finding rank and suit of a card}{}{subsection.3.2}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Pipeline for determining the rank and suit of a card}}{}{figure.3}}
 \newlabel{fig:RankSuitOutline}{{3}{}{Pipeline for determining the rank and suit of a card}{figure.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\unhbox \voidb@x \hbox {III-B}1}Determining suit}{}{subsubsection.3.2.1}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\unhbox \voidb@x \hbox {III-B}2}determining if a card is a face or nonface card}{}{subsubsection.3.2.2}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\unhbox \voidb@x \hbox {III-B}3}classifying face cards}{}{subsubsection.3.2.3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\unhbox \voidb@x \hbox {III-B}4}classifying nonface cards}{}{subsubsection.3.2.4}}
 \@writefile{toc}{\contentsline {section}{\numberline {IV}Results}{}{section.4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-A}}Test set}{}{subsection.4.1}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces 4 of the 60 images used to test the detector}}{}{figure.4}}
@@ -42,18 +52,16 @@
 \newlabel{tab:Confusion}{{\unhbox \voidb@x \hbox {IV-A}}{}{Test set}{figure.4}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Confusion matrix of the cards detected by the algorithm}}{}{table.1}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-B}}Missed cards}{}{subsection.4.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-C}}Wrong suit}{}{subsection.4.3}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces An example of an undetected card due to the narrow search window.}}{}{figure.5}}
 \newlabel{fig:error11}{{5}{}{An example of an undetected card due to the narrow search window}{figure.5}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces An example of an undetected card due to keypoint threshold.}}{}{figure.6}}
 \newlabel{fig:error17}{{6}{}{An example of an undetected card due to keypoint threshold}{figure.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-D}}Wrong rank}{}{subsection.4.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-C}}Wrong suit}{}{subsection.4.3}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Blurry Clubs card, detected as a Spade.}}{}{figure.7}}
 \newlabel{fig:error5}{{7}{}{Blurry Clubs card, detected as a Spade}{figure.7}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Sharp Clubs card, detected as a Spade.}}{}{figure.8}}
 \newlabel{fig:error3}{{8}{}{Sharp Clubs card, detected as a Spade}{figure.8}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Blurry cards, both correctly and incorrectly detected.}}{}{figure.9}}
-\newlabel{fig:error12}{{9}{}{Blurry cards, both correctly and incorrectly detected}{figure.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-D}}Wrong rank}{}{subsection.4.4}}
 \citation{PokerVision}
 \citation{PokerVision}
 \bibcite{SIFT}{1}
@@ -62,13 +70,17 @@
 \bibcite{HoughP}{4}
 \bibcite{OTSU}{5}
 \bibcite{CONTOURS}{6}
-\bibcite{HoughP}{7}
-\bibstyle{IEEEtran}
+\bibcite{CardRec}{7}
+\bibcite{HoughP}{8}
+\bibcite{HoughProb}{9}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Blurry cards, both correctly and incorrectly detected.}}{}{figure.9}}
+\newlabel{fig:error12}{{9}{}{Blurry cards, both correctly and incorrectly detected}{figure.9}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces A bad card detection precision, leading to a miscount of blobs.}}{}{figure.10}}
 \newlabel{fig:error20}{{10}{}{A bad card detection precision, leading to a miscount of blobs}{figure.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Discussion}{}{section.5}}
 \@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces A face card, classified as a non-face card.}}{}{figure.11}}
 \newlabel{fig:error4}{{11}{}{A face card, classified as a non-face card}{figure.11}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {V}Discussion}{}{section.5}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {V-A}}Future work}{}{subsection.5.1}}
 \@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusion}{}{section.6}}
 \@writefile{toc}{\contentsline {section}{References}{}{section*.1}}
+\bibstyle{IEEEtran}
