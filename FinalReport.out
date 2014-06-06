@@ -5,7 +5,10 @@
 \BOOKMARK [2][-]{subsection.3.2}{Finding rank and suit of a card}{section.3}% 5
 \BOOKMARK [1][-]{section.4}{Results}{}% 6
 \BOOKMARK [2][-]{subsection.4.1}{Test set}{section.4}% 7
-\BOOKMARK [1][-]{section.5}{Discussion}{}% 8
-\BOOKMARK [2][-]{subsection.5.1}{Future work}{section.5}% 9
-\BOOKMARK [1][-]{section.6}{Conclusion}{}% 10
-\BOOKMARK [1][-]{section*.1}{References}{}% 11
+\BOOKMARK [2][-]{subsection.4.2}{Missed cards}{section.4}% 8
+\BOOKMARK [2][-]{subsection.4.3}{Wrong suit}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.4}{Wrong rank}{section.4}% 10
+\BOOKMARK [1][-]{section.5}{Discussion}{}% 11
+\BOOKMARK [2][-]{subsection.5.1}{Future work}{section.5}% 12
+\BOOKMARK [1][-]{section.6}{Conclusion}{}% 13
+\BOOKMARK [1][-]{section*.1}{References}{}% 14
