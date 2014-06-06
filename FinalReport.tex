@@ -13,6 +13,7 @@
 \usepackage{amsfonts}
 \usepackage{hyperref}
 \usepackage{multirow}
+\usepackage{gensymb}
 
 
 \ifCLASSINFOpdf
@@ -77,7 +78,7 @@ TODO
 
 \begin{figure}[placement h]
 \centering
-\includegraphics[scale=0.4, trim= 0cm 0cm 0cm 0cm]{TODO.png}
+\includegraphics[width=0.45\textwidth]{images/outline.png}
 \caption{Outline of the process used for detecting cards in this paper}
 \label{fig:AlgOutline}
 \end{figure}
@@ -88,7 +89,7 @@ The process used in this paper for extracting the suit and rank of all cards in 
 
 \begin{figure}[placement h]
 \centering
-\includegraphics[scale=0.4, trim= 0cm 0cm 0cm 0cm]{TODO.png}
+\includegraphics[width=0.45\textwidth]{images/detection.png}
 \caption{Pipeline for identifying the cards and finding their corners}
 \label{fig:CornerOutline}
 \end{figure}
@@ -104,7 +105,7 @@ Once these corners are found it is trivial to find and apply an projective trans
 
 \begin{figure}[placement h]
 \centering
-\includegraphics[scale=0.4, trim= 0cm 0cm 0cm 0cm]{TODO.png}
+\includegraphics[width=0.45\textwidth]{images/recognition.png}
 \caption{Pipeline for determining the rank and suit of a card}
 \label{fig:RankSuitOutline}
 \end{figure}
@@ -129,7 +130,12 @@ Instead it is possbile to count the number of blobs on each nonface card. Each b
 
 \subsection{Test set}
 
-IMAGES OF THE TEST SET TODO
+\begin{figure}[placement h]
+\centering
+\includegraphics[width=0.45\textwidth]{images/testimgs.png}
+\caption{4 of the 60 images used to test the detector}
+\label{fig:TestImages}
+\end{figure}
 
 The method for determining the suit and rank of the cards described in method is in this section applied to a test set of 20 images, each containing 3 cards taken in an indoor environment with conditions similar to the ones for a real pokertable. In other words clutter will be present and the images will not be close ups of poker cards taken from above. Some photographs will include motion blur as this will generally be present when a mobile device is used for determining cards in real time.
 
@@ -151,19 +157,76 @@ The method for determining the suit and rank of the cards described in method is
 
 \end{table}
 
-The confusion matrix shows that the results for detecting the cards is good.
+The confusion matrix shows that the results for detecting the cards is good. Using the method described earlier on the test set the accuracy for suit detection is $83\%$ for all of the detected cards. The main problem in suit detection seems to be that clubs are detected as spaces as this happened in 7 out of 9 cases where the suit was incorrectly detected. The correct rank is detected for $92.5\%$ of the detected cards. The detected rank was usually off by one to the correct rank of the card. The accuracy of the whole pipeline is $66\%$.
 
-using the method described earlier on the test set the accuracy for suit detection is $83\%$ for all of the detected cards. The main problem in suit detection seems to be that clubs are detected as spaces, This happened in 7 out of the 9 cases where the suit was incorrectly detected. The correct rank is detected for $92.5\%$ of the detected cards. The detected rank was usually off by one to the correct rank of the card. The accuracy of the whole pipeline is $66\%$
+\subsection{Missed cards}
 
-CARDS $\&$ IMAGES INCorectly CLASSIFIED IMAGES
+In the test set, $10\%$ of the cards were not detected at all. One example of that is shown in figure~\ref{fig:error11}, where the $4$ of Clubs is not detected. If the card is not outlined properly, the window used for counting the number of blobs in the center of the card might be too small to detect large enough blobs. On the $4$ of Clubs, all blobs are spread out, which might lead to no blobs counted at all and results in a non-card output.
 
-COMMENTS ON the incorrectly classified images
+Another example is shown in figure~\ref{fig:error17}. To avoid false positives from for example the backside of a card, there is a threshold on the minimum number of matching keypoints required to be detected as a face card at all. In this case, the Queen of Diamonds reached too few matching keypoints, and is instead recognized as a non-card.
 
-CARDS $\&$ IMAGES Corectly CLASSIFIED IMAGES
+\begin{figure}[placement h]
+\centering
+\includegraphics[width=0.45\textwidth]{images/testResults/11.png}
+\caption{An example of an undetected card due to the narrow search window.}
+\label{fig:error11}
+\end{figure}
 
-COMMENTS ON the correctly classified images
+\begin{figure}[placement h]
+\centering
+\includegraphics[width=0.45\textwidth]{images/testResults/17.png}
+\caption{An example of an undetected card due to keypoint threshold.}
+\label{fig:error17}
+\end{figure}
 
-TODO
+
+\subsection{Wrong suit}
+
+The similarity between the shape of Clubs and Spades are a great cause of incorrect suit classifications. In figure~\ref{fig:error5}, the $7$ of Clubs is detected as the $7$ of Spade. It might seem that this is because of the blur, making the classification harder, but this is not always the case. In figure~\ref{fig:error3}, the card is captured sharply, and still it is detected incorrectly.
+
+\begin{figure}[placement h]
+\centering
+\includegraphics[width=0.45\textwidth]{images/testResults/5.png}
+\caption{Blurry Clubs card, detected as a Spade.}
+\label{fig:error5}
+\end{figure}
+
+\begin{figure}[placement h]
+\centering
+\includegraphics[width=0.45\textwidth]{images/testResults/3.png}
+\caption{Sharp Clubs card, detected as a Spade.}
+\label{fig:error3}
+\end{figure}
+
+Another incorrect suit classification is shown in figure~\ref{fig:error12}. The $5$ of Hearts, is detected as the $5$ of Diamonds. In this case, the blur has made the corner suit symbols warped, which leads to the error. However, the two other cards are even more blurred, but are still correctly classified.
+
+\begin{figure}[placement h]
+\centering
+\includegraphics[width=0.45\textwidth]{images/testResults/12.png}
+\caption{Blurry cards, both correctly and incorrectly detected.}
+\label{fig:error12}
+\end{figure}
+
+
+\subsection{Wrong rank}
+
+Cases of incorrectly classified ranks of cards are significantly more rare, than in the case of suits. The most common case is that too much of the surroundings of the card is included in the detected area, which leads to either a corner pushed into the search window, or a part of the background detected as a blob. An example of this is shown in figure~\ref{fig:error20}, where the $3$ of Hearts is detected as a $4$.
+
+There was one incorrect classification of a face card in the test image set. Figure~\ref{fig:error4} shows a King detected as a $10$. This is because the size of the largest blob in the binarized version of the card was too small to be a face card. If the number of blobs exceeds 10, the card is classified as a 10. Another card in the image is tilted $90$\degree, but still correctly classified.
+
+\begin{figure}[placement h]
+\centering
+\includegraphics[width=0.45\textwidth]{images/testResults/20.png}
+\caption{A bad card detection precision, leading to a miscount of blobs.}
+\label{fig:error20}
+\end{figure}
+
+\begin{figure}[placement h]
+\centering
+\includegraphics[width=0.45\textwidth]{images/testResults/4.png}
+\caption{A face card, classified as a non-face card.}
+\label{fig:error4}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Discussion %%%%%%%%%%%%%%%%
